@@ -7,6 +7,7 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "fs.h"
+#include "reboot.h"
 
 /*
  * the kernel's page table.
@@ -25,6 +26,9 @@ kvmmake(void)
 
   kpgtbl = (pagetable_t) kalloc();
   memset(kpgtbl, 0, PGSIZE);
+
+  // map reboot address
+  kvmmap(kpgtbl, (uint64)RBCTRL, REBOOT, PGSIZE, PTE_R | PTE_W);
 
   // uart registers
   kvmmap(kpgtbl, UART0, UART0, PGSIZE, PTE_R | PTE_W);
